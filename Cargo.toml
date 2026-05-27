@@ -2,5 +2,9 @@
 name = "sys-updater"
 version = "0.1.0"
 edition = "2024"
+authors = ["StudiCraft"]
+description = "A system updater for Arch-based systems."
+license = "Apache-2.0"
+repository = "https://github.com/StudiCraft/sys-updater"
 
 [dependencies]
