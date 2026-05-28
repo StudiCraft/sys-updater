@@ -1,9 +1,9 @@
 [package]
 name = "sys-updater"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 authors = ["StudiCraft"]
-description = "A system updater for Arch-based systems."
+description = "A system updater for some Linux-based systems."
 license = "Apache-2.0"
 repository = "https://github.com/StudiCraft/sys-updater"
 
