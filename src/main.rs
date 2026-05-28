@@ -80,9 +80,17 @@ fn update_debian() {
     match Command::new("sudo")
         .arg("apt-get")
         .arg("update")
-        .arg("-y")
         .status() {
             Ok(status) if status.success() => info!("Your system has been updated sucessfully!"),
+            Ok(status) => error!("Your system failed to update with error code: {}", status),
+            Err(e) => error!("Apt-get failed to start: {}", e)
+        }
+    match Command::new("sudo")
+        .arg("apt-get")
+        .arg("full-upgrade")
+        .arg("-y")
+        .status() {
+            Ok(status) if status.success() => info!("Your system has been updated successfully!"),
             Ok(status) => error!("Your system failed to update with error code: {}", status),
             Err(e) => error!("Apt-get failed to start: {}", e)
         }
