@@ -17,7 +17,8 @@ fn main() {
                         update_arch();
                     }
                     "debian" => {
-                        warn!("Debian-based distributions are not yet supported for updating. The logic is here and almost ready to function properly.");
+                        info!("Updating for Debian-based distributions...");
+                        update_debian();
                     }
                     "gentoo" => {
                         warn!("Gentoo-based distributions are not yet supported for updating. The logic is here and almost ready to function properly.");
@@ -73,6 +74,17 @@ fn update_arch() {
             Ok(status) if status.success() => info!("Your system has been updated successfully!"),
             Ok(status) => error!("Your system failed to update and exited with error code: {}", status),
             Err(e) => error!("Pacman failed to start: {}", e)
+        }
+}
+fn update_debian() {
+    match Command::new("sudo")
+        .arg("apt-get")
+        .arg("update")
+        .arg("-y")
+        .status() {
+            Ok(status) if status.success() => info!("Your system has been updated sucessfully!"),
+            Ok(status) => error!("Your system failed to update with error code: {}", status),
+            Err(e) => error!("Apt-get failed to start: {}", e)
         }
 }
 fn check_os() -> &'static str{
