@@ -24,7 +24,8 @@ fn main() {
                         warn!("Gentoo-based distributions are not yet supported for updating. The logic is here and almost ready to function properly.");
                     }
                     "fedora" => {
-                        warn!("Fedora-based distributions are not yet supported for updating. The logic is here and almost ready to function properly.");
+                        info!("Updating for Fedora-based distributions...");
+                        update_fedora();
                     }
                     "opensuse" => {
                         warn!("SUSE-based distributions are not yet supported for updating. The logic is here and almost ready to function properly.");
@@ -95,6 +96,17 @@ fn update_debian() {
             Ok(status) if status.success() => info!("Your system has been updated successfully!"),
             Ok(status) => error!("Your system failed to update with error code: {}", status),
             Err(e) => error!("Apt-get failed to start: {}", e)
+        }
+}
+fn update_fedora() {
+    match Command::new("sudo")
+        .arg("dnf")
+        .arg("upgrade")
+        .arg("-y")
+        .status() {
+            Ok(status) if status.success() => info!("Your system has been updated successfully!"),
+            Ok(status) => error!("Your system failed to update with error code: {}", status),
+            Err(e) => error!("Dnf failed to start: {}", e)
         }
 }
 fn check_os() -> &'static str{
