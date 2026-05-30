@@ -143,19 +143,19 @@ fn update_gentoo_packages() {
 fn check_os() -> &'static str{
     match System::name().as_deref() {
         Some("Windows") => {
-            return "windows"
+            "windows"
         }
         Some("Darwin") | Some("macOS") => {
-            return "macos"
+            "macos"
         }
         Some("FreeBSD") | Some("NetBSD") | Some("OpenBSD") | Some("MidnightBSD") => {
-            return "bsd"
+            "bsd"
         }
         Some(_) => {
-            return check_linux();
+            check_linux()
         }
         None => {
-            return "unknown/os"
+            "unknown/os"
         }
     }
 }
@@ -169,16 +169,16 @@ fn check_linux() -> &'static str{
     const SUSE_DISTROS: &[&str] = &["opensuse-tumbleweed", "opensuse-leap", "opensuse"];
 
     if ARCH_DISTROS.contains(&id.as_str()) {
-        return "arch"
+        "arch"
     } else if DEBIAN_DISTROS.contains(&id.as_str()) {
-        return "debian"
+        "debian"
     } else if GENTOO_DISTROS.contains(&id.as_str()) {
-        return "gentoo"
+        "gentoo"
     } else if FEDORA_DISTROS.contains(&id.as_str()) {
-        return "fedora"
+        "fedora"
     } else if SUSE_DISTROS.contains(&id.as_str()) {
-        return "opensuse"
+        "opensuse"
     } else {
-        return "unknown/linux"
+        "unknown/linux"
     }
 }
