@@ -29,7 +29,8 @@ fn main() {
                         update_fedora();
                     }
                     "opensuse" => {
-                        warn!("SUSE-based distributions are not yet supported for updating. The logic is here and almost ready to function properly.");
+                        info!("Updating for OpenSuse-based distributions...");
+                        update_opensuse();
                     }
                     "windows" => {
                         warn!("Windows is not yet supported for updating. The logic is here and almost ready to function properly.");
@@ -139,6 +140,41 @@ fn update_gentoo_packages() {
             Ok(status) => error!("Your system failed to update with error code: {}", status),
             Err(e) => error!("Emerge failed to start: {}", e)
         }
+}
+fn update_opensuse() {
+    match System::name().as_deref() {
+        Some("opensuse-tumbleweed") => {
+            update_opensuse_tumbleweed();
+        }
+        Some("opensuse-leap") => {
+            update_opensuse_leap();
+        }
+        _ => {
+            return
+        }
+    }
+}
+fn update_opensuse_tumbleweed() {
+    match Command::new("sudo")
+        .arg("zypper")
+        .arg("-n")
+        .arg("dup")
+        .status() {
+        Ok(status) if status.success() => info!("Your system has been updated successfully!"),
+        Ok(status) => error!("Your system failed to update with error code: {}", status),
+        Err(e) => error!("Zypper failed to start: {}", e)
+    }
+}
+fn update_opensuse_leap() {
+    match Command::new("sudo")
+        .arg("zypper")
+        .arg("-n")
+        .arg("up")
+        .status() {
+        Ok(status) if status.success() => info!("Your system has been updated successfully!"),
+        Ok(status) => error!("Your system failed to update with error code: {}", status),
+        Err(e) => error!("Zypper failed to start: {}", e)
+    }
 }
 fn check_os() -> &'static str{
     match System::name().as_deref() {
