@@ -48,6 +48,8 @@ fn main() {
                         error!("{} is not a recognized operating system. You can ask developers to add it or do it yourself by copying this ID: {}", os_info, os_info);
                     }
                 }
+            } else if args[1] == "help" {
+                help();
             } else {
                 help();
             }
