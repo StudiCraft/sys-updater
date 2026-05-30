@@ -31,19 +31,19 @@ fn main() {
                     "opensuse" => {
                         warn!("SUSE-based distributions are not yet supported for updating. The logic is here and almost ready to function properly.");
                     }
-                    "Windows" => {
+                    "windows" => {
                         warn!("Windows is not yet supported for updating. The logic is here and almost ready to function properly.");
                     }
-                    "macOS" => {
+                    "macos" => {
                         warn!("macOS is not yet supported for updating. The logic is here and almost ready to function properly.");
                     }
-                    "Unknown/OS" => {
+                    "unknown/os" => {
                         error!("The program couldn't detect the operating system used.");
                     }
-                    "Unknown/Linux" => {
+                    "unknown/linux" => {
                         error!("The program detected you were using Linux or a UNIX like operating system. Though it is not supported for updating. Please ask for developers or add yourself this ID to a family list: {}", System::distribution_id());
                     }
-                    "BSD" => {
+                    "bsd" => {
                         warn!("BSD systems are currently not supported. It is not prioritized but can be implemented in the future. Copy {} and ask a developer to implement it.", os_info);
                     }
                     _ => {
@@ -85,7 +85,7 @@ fn update_debian() {
         .arg("apt-get")
         .arg("update")
         .status() {
-            Ok(status) if status.success() => info!("Your system repositories have been updated sucessfully!"),
+            Ok(status) if status.success() => info!("Your system repositories have been updated successfully!"),
             Ok(status) => error!("Your system failed to update the repositories with error code: {}", status),
             Err(e) => error!("Apt-get failed to start: {}", e)
         }
@@ -143,19 +143,19 @@ fn update_gentoo_packages() {
 fn check_os() -> &'static str{
     match System::name().as_deref() {
         Some("Windows") => {
-            return "Windows"
+            return "windows"
         }
         Some("Darwin") | Some("macOS") => {
-            return "macOS"
+            return "macos"
         }
         Some("FreeBSD") | Some("NetBSD") | Some("OpenBSD") | Some("MidnightBSD") => {
-            return "BSD"
+            return "bsd"
         }
         Some(_) => {
             return check_linux();
         }
         None => {
-            return "Unknown/OS"
+            return "unknown/os"
         }
     }
 }
@@ -179,6 +179,6 @@ fn check_linux() -> &'static str{
     } else if SUSE_DISTROS.contains(&id.as_str()) {
         return "opensuse"
     } else {
-        return "Unknown/Linux"
+        return "unknown/linux"
     }
 }
