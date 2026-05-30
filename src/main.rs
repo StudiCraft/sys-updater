@@ -33,7 +33,8 @@ fn main() {
                         update_opensuse();
                     }
                     "windows" => {
-                        warn!("Windows is not yet supported for updating. The logic is here and almost ready to function properly.");
+                        info!("Updating for Windows system...");
+                        update_windows();
                     }
                     "macos" => {
                         warn!("macOS is not yet supported for updating. The logic is here and almost ready to function properly.");
@@ -174,6 +175,17 @@ fn update_opensuse_leap() {
         Ok(status) if status.success() => info!("Your system has been updated successfully!"),
         Ok(status) => error!("Your system failed to update with error code: {}", status),
         Err(e) => error!("Zypper failed to start: {}", e)
+    }
+}
+fn update_windows() {
+    match Command::new("winget")
+        .arg("upgrade")
+        .arg("--all")
+        .arg("--disable-interactivity")
+        .status() {
+        Ok(status) if status.success() => info!("Your system has been updated successfully!"),
+        Ok(status) => error!("Your system failed to update with error code: {}", status),
+        Err(e) => error!("Winget failed to start: {}", e)
     }
 }
 fn check_os() -> &'static str{
