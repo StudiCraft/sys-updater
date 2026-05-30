@@ -21,7 +21,8 @@ fn main() {
                         update_debian();
                     }
                     "gentoo" => {
-                        warn!("Gentoo-based distributions are not yet supported for updating. The logic is here and almost ready to function properly.");
+                        info!("Updating for Gentoo-based distributions...");
+                        update_gentoo();
                     }
                     "fedora" => {
                         info!("Updating for Fedora-based distributions...");
@@ -84,13 +85,13 @@ fn update_debian() {
         .arg("apt-get")
         .arg("update")
         .status() {
-            Ok(status) if status.success() => info!("Your system has been updated sucessfully!"),
-            Ok(status) => error!("Your system failed to update with error code: {}", status),
+            Ok(status) if status.success() => info!("Your system repositories have been updated sucessfully!"),
+            Ok(status) => error!("Your system failed to update the repositories with error code: {}", status),
             Err(e) => error!("Apt-get failed to start: {}", e)
         }
     match Command::new("sudo")
         .arg("apt-get")
-        .arg("full-upgrade")
+        .arg("dist-upgrade")
         .arg("-y")
         .status() {
             Ok(status) if status.success() => info!("Your system has been updated successfully!"),
@@ -107,6 +108,36 @@ fn update_fedora() {
             Ok(status) if status.success() => info!("Your system has been updated successfully!"),
             Ok(status) => error!("Your system failed to update with error code: {}", status),
             Err(e) => error!("Dnf failed to start: {}", e)
+        }
+}
+fn update_gentoo() {
+    match Command::new("sudo")
+        .arg("emaint")
+        .arg("-a")
+        .arg("sync")
+        .status() {
+            Ok(status) if status.success() => {
+                info!("Your system repositories have been updated successfully!");
+                update_gentoo_packages();
+            }
+            Ok(status) => error!("Your system failed to update the repositories with error code: {}", status),
+            Err(e) => error!("Emaint failed to start: {}", e)
+        }
+}
+fn update_gentoo_packages() {
+    match Command::new("sudo")
+        .arg("emerge")
+        .arg("--update")
+        .arg("--deep")
+        .arg("--changed-use")
+        .arg("--with-bdeps=y")
+        .arg("--quiet-build=y")
+        .arg("--keep-going=y")
+        .arg("@world")
+        .status() {
+            Ok(status) if status.success() => info!("Your system has been updated successfully!"),
+            Ok(status) => error!("Your system failed to update with error code: {}", status),
+            Err(e) => error!("Emerge failed to start: {}", e)
         }
 }
 fn check_os() -> &'static str{
