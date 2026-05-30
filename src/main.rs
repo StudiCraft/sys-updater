@@ -37,7 +37,9 @@ fn main() {
                         update_windows();
                     }
                     "macos" => {
-                        warn!("macOS is not yet supported for updating. The logic is here and almost ready to function properly.");
+                        info!("Updating for MacOS system...");
+                        warn!("Keep in mind that on MacOS systems, it will only update the core operating system or some Apple products like Safari, it will not update other applications.");
+                        update_macos();
                     }
                     "unknown/os" => {
                         error!("The program couldn't detect the operating system used.");
@@ -186,6 +188,16 @@ fn update_windows() {
         Ok(status) if status.success() => info!("Your system has been updated successfully!"),
         Ok(status) => error!("Your system failed to update with error code: {}", status),
         Err(e) => error!("Winget failed to start: {}", e)
+    }
+}
+fn update_macos() {
+    match Command::new("softwareupdate")
+        .arg("--install")
+        .arg("--all")
+        .status() {
+        Ok(status) if status.success() => info!("Your system has been updated successfully!"),
+        Ok(status) => error!("Your system failed to update with error code: {}", status),
+        Err(e) => error!("Softwareupdate failed to start: {}", e)
     }
 }
 fn check_os() -> &'static str{
