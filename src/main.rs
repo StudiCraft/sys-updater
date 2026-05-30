@@ -142,11 +142,11 @@ fn update_gentoo_packages() {
         }
 }
 fn update_opensuse() {
-    match System::name().as_deref() {
-        Some("opensuse-tumbleweed") => {
+    match System::distribution_id().to_lowercase().as_str() {
+        "opensuse-tumbleweed" => {
             update_opensuse_tumbleweed();
         }
-        Some("opensuse-leap") => {
+        "opensuse-leap" => {
             update_opensuse_leap();
         }
         _ => {
